@@ -35,6 +35,13 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public ResponseVO memberIdCheck(MemberIdCheckRequestVO vo) { //아이디 중복 체크
+        if(memberRepository.findByUserId(vo.getUser_id())==null)
+            return new ResponseVO(ResultCode.SUCCESS_CODE, "사용가능한 아이디입니다.");
+        else return new ResponseVO(ResultCode.DUPLICATE_ERROR, "이미 사용중인 아이디입니다.");
+    }
+
+    @Override
     public ResponseVO memberLogin(MemberLoginRequestVO vo) { //회원 로그인
         Member member = memberRepository.findByUserId(vo.getUser_id());
         if(member==null) return new ResponseVO(ResultCode.LOGIN_ERROR, "존재하지 않는 아이디입니다.");
@@ -65,6 +72,7 @@ public class MemberServiceImpl implements MemberService {
     public ResponseVO memberDelete(MemberDeleteRequestVO vo, String token) { //회원 탈퇴
         Member member = memberRepository.findByUserId(tokenSecurity.getSubject(token));
         if(!aes256SEC.decrypt(member.getUserPw()).equals(vo.getUser_pw())) return new ResponseVO(ResultCode.LOGIN_ERROR, "비밀번호가 일치하지 않습니다.");
+        memberInfoRepository.delete(member.getMemberInfo());
         memberRepository.delete(member);
         return new ResponseVO();
     }

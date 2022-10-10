@@ -7,6 +7,8 @@ public interface MemberService {
 
     public ResponseVO memberRegister(MemberRegisterRequestVO vo); //회원 등록
 
+    public ResponseVO memberIdCheck(MemberIdCheckRequestVO vo);
+
     public ResponseVO memberLogin(MemberLoginRequestVO vo); //회원 로그인
 
     public ResponseVO memberPasswordModify(MemberPasswordModifyRequestVO vo, String token); //회원 비밀번호 수정

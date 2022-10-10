@@ -2,6 +2,7 @@ package com.moais.todo.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -9,9 +10,11 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-@Table(name = "toto.work")
+@ToString
+@Table(name = "todo.work")
 @SequenceGenerator(
         name = "WORK_SEQ_GENERATOR",
+        catalog = "todo",
         sequenceName = "WORK_SEQ",
         initialValue = 1, allocationSize = 200
 )
@@ -23,7 +26,7 @@ public class Work {
     private String content; //할일 내용
 
     @Enumerated(EnumType.STRING)
-    private WorkState state; //상태(할일, 진행중, 완료됨)
+    private WorkState state = WorkState.할일; //상태(할일, 진행중, 완료됨)
 
     @Column(name = "reg_date")
     private LocalDateTime regDate = LocalDateTime.now(); //등록일시
@@ -37,4 +40,12 @@ public class Work {
     private Member member; //회원
 
 
+    public Work() {
+
+    }
+
+    public Work(String content, Member member) {
+        this.content = content;
+        this.member = member;
+    }
 }

@@ -52,7 +52,7 @@ public class MemberSaveTest {
     public void memberRegisterTest() {
         MemberRegisterRequestVO vo = new MemberRegisterRequestVO();
         vo.setUser_id("eee");
-        vo.setPassword("123");
+        vo.setUser_pw("123");
         vo.setNick_name("ㅁㅁㅁㅁ");
         memberService.memberRegister(vo);
     }

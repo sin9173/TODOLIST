@@ -27,6 +27,12 @@ public class MemberController {
         return memberService.memberRegister(data);
     }
 
+    @ApiOperation(value = "아이디체크", notes = "아이디 중복을 체크합니다.", response = ResponseVO.class)
+    @PostMapping("/member/idcheck")
+    public ResponseVO memberIdCheck(@RequestBody MemberIdCheckRequestVO data) {
+        return memberService.memberIdCheck(data);
+    }
+
     @ApiOperation(value = "로그인", notes = "로그인을 합니다.", response = MemberLoginVO.class)
     @PostMapping("/member/login")
     public ResponseVO memberLogin(@RequestBody MemberLoginRequestVO data) {
