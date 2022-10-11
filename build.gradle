@@ -47,6 +47,11 @@ dependencies {
 
 }
 
+bootWar {
+	archiveBaseName = "todo"
+	archiveFileName = "todo.war"
+}
+
 tasks.named('test') {
 	useJUnitPlatform()
 }

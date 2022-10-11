@@ -2,9 +2,9 @@ spring:
   datasource:
     mysql:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      jdbc-url: "jdbc:mysql://localhost:3306/?useSSL=false&serverTimzone=Asia/Seoul&allowMultiQueries=true&autoReconnection=true"
-      username: root
-      password: 1111
+      jdbc-url: "jdbc:mysql://3.135.227.236:3306/?useSSL=false&serverTimzone=Asia/Seoul&allowMultiQueries=true&autoReconnection=true"
+      username: sid
+      password: dudwhg1!@
       initial-size : 5
       min-idle: 8
       max-idle: 8
