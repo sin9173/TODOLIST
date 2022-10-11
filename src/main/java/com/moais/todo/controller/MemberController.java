@@ -8,13 +8,14 @@ import com.moais.todo.vo.response.MemberLoginVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Api(value = "회원 API", description = "회원 API")
 @RestController
+@CrossOrigin(
+        origins = {"*", "http://localhost:3000/", "https://todo.nyangko.com/"},
+        allowedHeaders = {"Content-Type", "Content-Length", "Access-Control-Allow-Origin", "Access-Control-Allow-Headers", "Access-Control-Allow-Credentials", "X-Requested-With", "token", "refresh_token"}
+        )
 @RequiredArgsConstructor
 public class MemberController {
 
