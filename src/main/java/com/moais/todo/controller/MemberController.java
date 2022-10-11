@@ -12,10 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 @Api(value = "회원 API", description = "회원 API")
 @RestController
-@CrossOrigin(
-        origins = {"*", "http://localhost:3000/", "https://todo.nyangko.com/"},
-        allowedHeaders = {"Content-Type", "Content-Length", "Access-Control-Allow-Origin", "Access-Control-Allow-Headers", "Access-Control-Allow-Credentials", "X-Requested-With", "token", "refresh_token"}
-        )
 @RequiredArgsConstructor
 public class MemberController {
 
