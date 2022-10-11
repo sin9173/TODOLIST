@@ -55,7 +55,8 @@ public class MemberServiceImpl implements MemberService {
     public ResponseVO memberPasswordModify(MemberPasswordModifyRequestVO vo, String token) { //비밀번호 변경
         if(vo.getUser_pw().equals("")) return new ResponseVO(ResultCode.NULL_ERROR, "비밀번호를 빈값으로 설정할 수 없습니다.");
         Member member = memberRepository.findByUserId(tokenSecurity.getSubject(token));
-        member.setUserPw(aes256SEC.encrypt(vo.getUser_pw()));
+        if(!aes256SEC.decrypt(member.getUserPw()).equals(vo.getUser_pw())) return new ResponseVO(ResultCode.LOGIN_ERROR, "비밀번호가 일치하지 않습니다.");
+        member.setUserPw(aes256SEC.encrypt(vo.getNew_user_pw()));
         memberRepository.save(member);
         return new ResponseVO();
     }

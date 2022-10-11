@@ -9,6 +9,9 @@ import lombok.ToString;
 @Setter
 @ToString
 public class MemberPasswordModifyRequestVO {
-    @ApiModelProperty(notes = "변경할 비밀번호", example = "123", required = true, position = 0)
+    @ApiModelProperty(notes = "비밀번호", example = "123", required = true, position = 0)
     private String user_pw;
+
+    @ApiModelProperty(notes = "변경할 비밀번호", example = "123", required = true, position = 1)
+    private String new_user_pw;
 }

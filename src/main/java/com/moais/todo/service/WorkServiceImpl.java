@@ -38,7 +38,7 @@ public class WorkServiceImpl implements WorkService {
     @Override
     public ResponseVO workList(WorkListRequestVO vo, String token) { //할일 리스트 조회
         Member member = memberRepository.findByUserId(tokenSecurity.getSubject(token));
-        Page<Work> data = workRepository.findByMemberOrderByIdDesc(member, PageRequest.of(vo.getPage(), 10));
+        Page<Work> data = workRepository.findByMemberOrderByIdDesc(member, PageRequest.of(vo.getPage()==0?(vo.getPage()):(vo.getPage()-1), 10));
         return new WorkListVO(data);
     }
 
@@ -46,6 +46,7 @@ public class WorkServiceImpl implements WorkService {
     public ResponseVO workRecent(String token) { //할일 최근 데이터 조회
         Member member = memberRepository.findByUserId(tokenSecurity.getSubject(token));
         Work work = workRepository.findFirstByMemberOrderByRegDateDesc(member);
+        if(work==null) return new ResponseVO(ResultCode.NULL_ERROR, "데이터없음");
         return new WorkRecentVO(work);
     }
 

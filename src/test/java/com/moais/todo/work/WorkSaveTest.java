@@ -22,8 +22,8 @@ public class WorkSaveTest {
 
     @Test
     public void workRegisterTest() {
-        Member member = memberRepository.findByUserId("aaa");
-        Work work = new Work("안녕할일2", member);
-        workRepository.save(work);
+//        Member member = memberRepository.findByUserId("aaa");
+//        Work work = new Work("안녕할일2", member);
+//        workRepository.save(work);
     }
 }

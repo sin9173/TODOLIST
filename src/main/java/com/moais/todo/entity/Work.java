@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
         name = "WORK_SEQ_GENERATOR",
         catalog = "todo",
         sequenceName = "WORK_SEQ",
-        initialValue = 1, allocationSize = 200
+        initialValue = 1, allocationSize = 5
 )
 public class Work {
     @Id

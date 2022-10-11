@@ -29,7 +29,9 @@ public class WorkListVO extends ResponseVO { //할일 리스트 조회 데이터
     private List<WorkListData> list;
 
     public WorkListVO(Page<Work> data) {
-        PagingVO page = new PagingVO(data.getTotalElements(), data.getNumber(), data.getSize());
+        System.out.println("totalElement : " + data.getTotalElements());
+        System.out.println("totalPages : " + data.getTotalPages());
+        PagingVO page = new PagingVO(data.getTotalElements(), data.getNumber()+1, data.getSize());
         startPage = page.getStartPage();
         endPage = page.getEndPage();
         lastPage = page.getLastPage();

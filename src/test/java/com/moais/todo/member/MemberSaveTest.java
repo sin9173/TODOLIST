@@ -28,33 +28,33 @@ public class MemberSaveTest {
 
     @Test
     public void saveTest() {
-        Member member = new Member();
-        MemberInfo memberInfo = new MemberInfo();
-        memberInfo.setNickName("테스트");
-        memberInfoRepository.save(memberInfo);
-        member.setUserId("bbb");
-        member.setUserPw("1111");
-        member.setMemberInfo(memberInfo);
-        memberRepository.save(member);
+        //Member member = new Member();
+        //MemberInfo memberInfo = new MemberInfo();
+        //memberInfo.setNickName("테스트");
+        //memberInfoRepository.save(memberInfo);
+        //member.setUserId("bbb");
+        //member.setUserPw("1111");
+        //member.setMemberInfo(memberInfo);
+        //memberRepository.save(member);
 
     }
 
     @Test
     public void modifyNickNameTest() {
-        Long id = 2L;
-        Member member = memberRepository.findById(id).get();
-        System.out.println(member);
-        member.getMemberInfo().setNickName("닉네임변경1");
-        memberInfoRepository.save(member.getMemberInfo());
+        //Long id = 2L;
+        //Member member = memberRepository.findById(id).get();
+        //System.out.println(member);
+        //member.getMemberInfo().setNickName("닉네임변경1");
+        //memberInfoRepository.save(member.getMemberInfo());
     }
 
     @Test
     public void memberRegisterTest() {
-        MemberRegisterRequestVO vo = new MemberRegisterRequestVO();
-        vo.setUser_id("eee");
-        vo.setUser_pw("123");
-        vo.setNick_name("ㅁㅁㅁㅁ");
-        memberService.memberRegister(vo);
+        //MemberRegisterRequestVO vo = new MemberRegisterRequestVO();
+        //vo.setUser_id("eee");
+        //vo.setUser_pw("123");
+        //vo.setNick_name("ㅁㅁㅁㅁ");
+        //memberService.memberRegister(vo);
     }
 
 
