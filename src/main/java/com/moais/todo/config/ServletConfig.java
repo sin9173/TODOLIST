@@ -33,7 +33,7 @@ public class ServletConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("*")
+                .allowedOrigins("*", "http://localhost:3000/", "https://todo.nyangko.com/")
                 .allowedMethods("POST", "GET", "OPTIONS", "PUT")
                 .allowedHeaders("Content-Type", "Content-Length", "Access-Control-Allow-Origin", "Access-Control-Allow-Headers", "Access-Control-Allow-Credentials", "X-Requested-With", "token", "refresh_token")
                 .maxAge(3600);
