@@ -33,16 +33,16 @@ public class MemberSelectTest {
 
     @Test
     public void selectTest() {
-//        Member member = memberRepository.findByUserId("aaa");
-//        Assertions.assertThat(member.getUserId().equals("aaa"));
+        Member member = memberRepository.findByUserId("test01");
+        Assertions.assertThat(member.getUserId().equals("test01"));
     }
 
     @Test
     public void loginTest() {
         MemberLoginRequestVO vo = new MemberLoginRequestVO();
-        vo.setUser_id("eee");
-        vo.setUser_pw("123");
+        vo.setUser_id("test01");
+        vo.setUser_pw("123456");
         ResponseVO response = memberService.memberLogin(vo);
-//        Assertions.assertThat(response.getResult()).isEqualTo(ResultCode.SUCCESS_CODE);
+        Assertions.assertThat(response.getResult()).isEqualTo(ResultCode.SUCCESS_CODE);
     }
 }

@@ -26,22 +26,22 @@ public class WorkSelectTest {
 
     @Test
     public void workSelectTest() {
-//        Member member = memberRepository.findByUserId("aaa");
-//        List<Work> list = workRepository.findByMember(member);
-//        System.out.println(list);
+        Member member = memberRepository.findByUserId("test01");
+        List<Work> list = workRepository.findByMember(member);
+        //System.out.println(list);
     }
 
     @Test
     public void workSelectFirstTest() {
-//        Member member = memberRepository.findByUserId("aaa");
-//        Work work = workRepository.findFirstByMemberOrderByRegDateDesc(member);
+        Member member = memberRepository.findByUserId("test01");
+        Work work = workRepository.findFirstByMemberOrderByRegDateDesc(member);
 //        System.out.println(work);
     }
 
     @Test
     public void workSelectPageTest() {
-        Member member = memberRepository.findByUserId("aaa");
-//        Page<Work> data = workRepository.findByMemberOrderByIdDesc(member, PageRequest.of(3, 5));
+        Member member = memberRepository.findByUserId("test01");
+        Page<Work> data = workRepository.findByMemberOrderByIdDesc(member, PageRequest.of(3, 5));
 //        System.out.println(data.getTotalElements()); //총 ROW 수
 //        System.out.println(data.getTotalPages()); //총페이지
 //        System.out.println(data.getNumber()); // 페이지
