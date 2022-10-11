@@ -1,5 +1,6 @@
 package com.moais.todo.config;
 
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @Configuration
 @EnableWebMvc
+@ComponentScan(basePackages = {"com.moais.todo.controller"})
 public class ServletConfig implements WebMvcConfigurer {
 
     @Override
