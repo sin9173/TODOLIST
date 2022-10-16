@@ -34,10 +34,10 @@ public class SwaggerConfiguration extends WebMvcConfigurationSupport {
     private ApiInfo apiInfo() {
         return new ApiInfo(
                 "TODO 리스트 API",
-                "TODO 리스트 제작을 위한 API 입니다.",
+                "TODO 리스트 제작을 위한 API 입니다.\n RESULT CODE : 00:성공, 01:인증에러, 02:NULL 에러 , 03:중복에러, 04:에러",
                 "1.0.0",
                 "http://localhost:8080",
-                new Contact("신영국", "http://localhost:8080", "sid9173@gmail.com"),
+                new Contact("신영국", "https://github.com/sin9173", "sid9173@gmail.com"),
                 "LICENCE",
                 "LICENCE URL",
                 Collections.emptyList()

@@ -40,17 +40,6 @@ public class RequestUtil {
         return collect.size()==0?"":collect.get(0);
     }
 
-    //Object 의 파라미터중 null 인 파라미터가 있을 경우 true
-    public static boolean isParamNull(Object vo) throws Exception {
-        Field[] fields = vo.getClass().getDeclaredFields();
-        Method method = null;
-        for(Field f : fields) {
-            method = vo.getClass().getMethod("get" + f.getName().substring(0, 1).toUpperCase() + f.getName().substring(1));
-            String value = String.valueOf(method.invoke(vo));
-            if(value==null || value.equals("null")) return true;
-        }
-        return false;
-    }
 
     //Request 에서 파라미터를 추출
     public static String getRequestBody() {
