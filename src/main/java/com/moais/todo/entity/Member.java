@@ -24,7 +24,7 @@ public class Member {
     @Column(name = "user_pw")
     private String userPw; //회원 비밀번호
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "member_info_id")
     private MemberInfo memberInfo; //회원정보
 

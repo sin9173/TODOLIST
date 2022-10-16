@@ -4,6 +4,7 @@ import com.moais.todo.util.RequestUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.PrintWriter;
 import java.io.StringWriter;
 
 @Slf4j
@@ -19,16 +20,16 @@ public class ExceptionLog<T> {
 
     public void logging() {
         HttpServletRequest request = RequestUtil.getRequest();
-        String request_url = request.getRequestURI().toString();
+        String request_url = request.getRequestURI();
         String request_ip = RequestUtil.getClientIP();
 
         StringWriter errors = new StringWriter();
-        e.printStackTrace();
+        e.printStackTrace(new PrintWriter(errors));
 
         log.error("[" + request_url + "]");
         log.error("[" + request_ip + "]");
         log.error("[" + e.toString() + "]");
         log.error("[" + (vo==null?"":vo.toString()) + "]");
-        log.error("Exception message - " + errors.toString());
+        log.error("Exception message - " + errors);
     }
 }
