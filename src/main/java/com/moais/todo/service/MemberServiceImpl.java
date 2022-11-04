@@ -4,8 +4,9 @@ import com.moais.todo.entity.Member;
 import com.moais.todo.entity.MemberInfo;
 import com.moais.todo.repository.MemberInfoRepository;
 import com.moais.todo.repository.MemberRepository;
+import com.moais.todo.security.Encryption;
 import com.moais.todo.security.TokenSecurity;
-import com.moais.todo.util.AES256SEC;
+import com.moais.todo.security.AES256SEC;
 import com.moais.todo.vo.ResponseVO;
 import com.moais.todo.vo.ResultCode;
 import com.moais.todo.vo.request.*;
@@ -20,7 +21,7 @@ public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final MemberInfoRepository memberInfoRepository;
 
-    private final AES256SEC aes256SEC;
+    private final Encryption encryption;
 
     private final TokenSecurity tokenSecurity;
 
@@ -28,8 +29,9 @@ public class MemberServiceImpl implements MemberService {
     public ResponseVO memberRegister(MemberRegisterRequestVO vo) { //회원 등록
         MemberInfo memberInfo = new MemberInfo(vo.getNick_name());
         memberInfoRepository.save(memberInfo);
-        vo.setUser_pw(aes256SEC.encrypt(vo.getUser_pw()));
-        Member member = new Member(vo, memberInfo);
+        String salt = encryption.getSalt();
+        vo.setUser_pw(encryption.encrypt(vo.getUser_pw(), salt));
+        Member member = new Member(vo, memberInfo, salt);
         memberRepository.save(member);
         return new ResponseVO();
     }
@@ -45,7 +47,7 @@ public class MemberServiceImpl implements MemberService {
     public ResponseVO memberLogin(MemberLoginRequestVO vo) { //회원 로그인
         Member member = memberRepository.findByUserId(vo.getUser_id());
         if(member==null) return new ResponseVO(ResultCode.LOGIN_ERROR, "존재하지 않는 아이디입니다.");
-        if(!aes256SEC.decrypt(member.getUserPw()).equals(vo.getUser_pw()))
+        if(!(member.getUserPw()).equals(encryption.encrypt(vo.getUser_pw(), member.getSalt())))
             return new ResponseVO(ResultCode.LOGIN_ERROR, "비밀번호가 일치하지 않습니다.");
         return new MemberLoginVO(member, tokenSecurity.createToken(member.getUserId(), (1000 * 60 * 60 * 24)));
     }
@@ -55,8 +57,9 @@ public class MemberServiceImpl implements MemberService {
     public ResponseVO memberPasswordModify(MemberPasswordModifyRequestVO vo, String token) { //비밀번호 변경
         if(vo.getUser_pw().equals("")) return new ResponseVO(ResultCode.NULL_ERROR, "비밀번호를 빈값으로 설정할 수 없습니다.");
         Member member = memberRepository.findByUserId(tokenSecurity.getSubject(token));
-        if(!aes256SEC.decrypt(member.getUserPw()).equals(vo.getUser_pw())) return new ResponseVO(ResultCode.LOGIN_ERROR, "비밀번호가 일치하지 않습니다.");
-        member.setUserPw(aes256SEC.encrypt(vo.getNew_user_pw()));
+        if(!(member.getUserPw()).equals(encryption.encrypt(vo.getUser_pw(), member.getSalt()))) return new ResponseVO(ResultCode.LOGIN_ERROR, "비밀번호가 일치하지 않습니다.");
+        member.setSalt(encryption.getSalt());
+        member.setUserPw(encryption.encrypt(vo.getNew_user_pw(), member.getSalt()));
         memberRepository.save(member);
         return new ResponseVO();
     }
@@ -72,7 +75,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public ResponseVO memberDelete(MemberDeleteRequestVO vo, String token) { //회원 탈퇴
         Member member = memberRepository.findByUserId(tokenSecurity.getSubject(token));
-        if(!aes256SEC.decrypt(member.getUserPw()).equals(vo.getUser_pw())) return new ResponseVO(ResultCode.LOGIN_ERROR, "비밀번호가 일치하지 않습니다.");
+        if(!(member.getUserPw()).equals(encryption.encrypt(vo.getUser_pw(), member.getSalt()))) return new ResponseVO(ResultCode.LOGIN_ERROR, "비밀번호가 일치하지 않습니다.");
         memberInfoRepository.delete(member.getMemberInfo());
         memberRepository.delete(member);
         return new ResponseVO();

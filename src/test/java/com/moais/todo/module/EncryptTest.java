@@ -1,7 +1,6 @@
 package com.moais.todo.module;
 
-import com.moais.todo.security.AES256SEC;
-import org.assertj.core.api.Assertions;
+import com.moais.todo.security.Encryption;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,22 +9,19 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-public class AESTest {
+public class EncryptTest {
 
     @Autowired
-    private AES256SEC aes256SEC;
+    Encryption encryption;
 
     @Test
-    public void encTest() {
-        String a = "aaaa";
-        String b = aes256SEC.encrypt(a);
+    public void encryptTest() {
+        String plain = "abcde";
+        String salt = encryption.getSalt();
+        String result = encryption.encrypt(plain, salt);
 
-        System.out.println(b);
+        System.out.println("salt : " + salt);
 
-        System.out.println(aes256SEC.decrypt(b));
-        Assertions.assertThat(aes256SEC.decrypt(b).equals(a));
+        System.out.println("result : " + result);
     }
-
-
-
 }

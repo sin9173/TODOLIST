@@ -1,4 +1,4 @@
-package com.moais.todo.util;
+package com.moais.todo.security;
 
 import com.moais.todo.log.ExceptionLog;
 import org.apache.tomcat.util.codec.binary.Base64;
