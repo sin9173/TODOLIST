@@ -27,9 +27,13 @@ public class MemberLoginVO extends ResponseVO { //로그인 응답데이터
     @ApiModelProperty(notes = "토큰", example = "", position = 4)
     private String token;
 
-    public MemberLoginVO(Member member, String token) {
+    @ApiModelProperty(notes = "refresh 토큰", example = "", position = 5)
+    private String refresh_token;
+
+    public MemberLoginVO(Member member, String token, String refresh_token) {
         this.user_id = member.getUserId();
         this.nick_name = member.getMemberInfo().getNickName();
         this.token = token;
+        this.refresh_token = refresh_token;
     }
 }

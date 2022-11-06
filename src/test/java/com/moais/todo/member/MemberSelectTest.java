@@ -11,8 +11,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @ExtendWith(SpringExtension.class)
@@ -42,7 +44,8 @@ public class MemberSelectTest {
         MemberLoginRequestVO vo = new MemberLoginRequestVO();
         vo.setUser_id("test01");
         vo.setUser_pw("123456");
-        ResponseVO response = memberService.memberLogin(vo);
+        HttpServletResponse httpServletResponse = new MockHttpServletResponse();
+        ResponseVO response = memberService.memberLogin(vo, httpServletResponse);
         Assertions.assertThat(response.getResult()).isEqualTo(ResultCode.SUCCESS_CODE);
     }
 }
