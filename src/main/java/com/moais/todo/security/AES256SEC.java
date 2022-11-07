@@ -19,7 +19,7 @@ public class AES256SEC {
     @Value("${aes.key}")
     private String ENCODING_KEY;
 
-    public String encrypt(String plainText, String salt) { // AES128 암호화
+    public String encrypt(String plainText, String salt) { // AES256 암호화
         String cipherText = "";
         if(plainText==null || plainText.length()==0 ) return cipherText;
 
@@ -44,7 +44,7 @@ public class AES256SEC {
         return cipherText;
     }
 
-    public String decrypt(String cipherText) { //AES128 복호화
+    public String decrypt(String cipherText) { //AES256 복호화
         String plainText = "";
         if(cipherText==null || cipherText.length()==0) return plainText;
 

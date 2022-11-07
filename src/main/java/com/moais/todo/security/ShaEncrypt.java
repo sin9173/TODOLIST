@@ -21,7 +21,6 @@ public class ShaEncrypt implements Encryption {
                 SHA3.DigestSHA3 digestSHA3 = new SHA3.Digest384();
                 hashBytes = digestSHA3.digest(temp.getBytes());
                 temp = Base64.getEncoder().encodeToString(hashBytes);
-                System.out.println("i : " + temp);
             }
         } catch (Exception e) {
             e.printStackTrace();

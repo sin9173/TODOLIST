@@ -53,7 +53,7 @@ public class WorkServiceImpl implements WorkService {
         Work work = getWork(id);
         if(work==null) return new ResponseVO(ResultCode.NULL_ERROR, "존재하지 않는 할일입니다.");
         if(!work.getMember().getUserId().equals(user_id))
-            return new ResponseVO(ResultCode.LOGIN_ERROR, "게시자의 아이디와 로그인한 계정이 다릅니다.");
+            return new ResponseVO(ResultCode.INFO_ERROR, "게시자의 아이디와 로그인한 계정이 다릅니다.");
         work.setContent(vo.getContent());
         workRepository.save(work);
         return new ResponseVO();
@@ -64,7 +64,7 @@ public class WorkServiceImpl implements WorkService {
         Work work = getWork(id);
         if(work==null) return new ResponseVO(ResultCode.NULL_ERROR, "존재하지 않는 할일입니다.");
         if(!work.getMember().getUserId().equals(user_id))
-            return new ResponseVO(ResultCode.LOGIN_ERROR, "게시자의 아이디와 로그인한 계정이 다릅니다.");
+            return new ResponseVO(ResultCode.INFO_ERROR, "게시자의 아이디와 로그인한 계정이 다릅니다.");
         work.setState(vo.getState());
         workRepository.save(work);
         return new ResponseVO();
@@ -75,7 +75,7 @@ public class WorkServiceImpl implements WorkService {
         Work work = getWork(vo.getId());
         if(work==null) return new ResponseVO(ResultCode.NULL_ERROR, "존재하지 않는 할일입니다.");
         if(!work.getMember().getUserId().equals(user_id))
-            return new ResponseVO(ResultCode.LOGIN_ERROR, "게시자의 아이디와 로그인한 계정이 다릅니다.");
+            return new ResponseVO(ResultCode.INFO_ERROR, "게시자의 아이디와 로그인한 계정이 다릅니다.");
         workRepository.delete(work);
         return new ResponseVO();
     }
