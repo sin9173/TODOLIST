@@ -18,7 +18,8 @@ public class AESTest {
     @Test
     public void encTest() {
         String a = "aaaa";
-        String b = aes256SEC.encrypt(a);
+        String salt = "123";
+        String b = aes256SEC.encrypt(a, salt);
 
         System.out.println(b);
 
