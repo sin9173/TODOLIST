@@ -10,6 +10,7 @@ import com.moais.todo.security.Encryption;
 import com.moais.todo.security.TokenSecurity;
 import com.moais.todo.security.AES256SEC;
 import com.moais.todo.util.RequestUtil;
+import com.moais.todo.util.ResponseUtils;
 import com.moais.todo.vo.ResponseVO;
 import com.moais.todo.vo.ResultCode;
 import com.moais.todo.vo.request.*;
@@ -65,38 +66,13 @@ public class MemberServiceImpl implements MemberService {
         tokenRepository.save(tokenEntity);
 
         //Cookie
-        Cookie token_cookie = new Cookie("token", token);
-        token_cookie.setMaxAge(1000 * 60 * 10);
-        token_cookie.setPath("/");
-        token_cookie.setHttpOnly(true);
-
-        Cookie refresh_token_cookie = new Cookie("refresh_token", refresh_token);
-        refresh_token_cookie.setMaxAge(1000 * 60 * 60 * 24);
-        refresh_token_cookie.setPath("/");
-        refresh_token_cookie.setHttpOnly(true);
-
-        response.addCookie(token_cookie);
-        response.addCookie(refresh_token_cookie);
-
+        ResponseUtils.tokenCookie(token, refresh_token, response);
         return new MemberLoginVO(member, token, refresh_token);
     }
 
     @Override
     public ResponseVO memberLogout(HttpServletResponse response) {
-        //Cookie
-        Cookie token_cookie = new Cookie("token", null);
-        token_cookie.setMaxAge(1000 * 60 * 10);
-        token_cookie.setPath("/");
-        token_cookie.setHttpOnly(true);
-
-        Cookie refresh_token_cookie = new Cookie("refresh_token", null);
-        refresh_token_cookie.setMaxAge(1000 * 60 * 60 * 24);
-        refresh_token_cookie.setPath("/");
-        refresh_token_cookie.setHttpOnly(true);
-
-        response.addCookie(token_cookie);
-        response.addCookie(refresh_token_cookie);
-
+        ResponseUtils.tokenCookie(null, null, response);
         return new ResponseVO(ResultCode.SUCCESS_CODE, "로그아웃");
     }
 
@@ -105,16 +81,13 @@ public class MemberServiceImpl implements MemberService {
         if(refresh_token==null) refresh_token = RequestUtil.getCookieParam("refresh_token");
         if(access_token==null) access_token = RequestUtil.getCookieParam("token");
 
-        System.out.println("refresh : " + refresh_token);
-        System.out.println("access : " + access_token);
-
         Token tokenEntity = tokenRepository.findByRefreshTokenEqualsAndAccessTokenEquals(refresh_token, access_token);
 
-        if(tokenEntity==null) return new ResponseVO(ResultCode.REFRESH_EXPIRE_ERROR, "유효하지 않은 토큰입니다.1");
+        if(tokenEntity==null) return new ResponseVO(ResultCode.REFRESH_EXPIRE_ERROR, "유효하지 않은 토큰입니다.");
         String tokenCheck = tokenSecurity.getSubject(refresh_token);
         if(tokenCheck.equals("")) {
             tokenRepository.delete(tokenEntity);
-            return new ResponseVO(ResultCode.REFRESH_EXPIRE_ERROR, "유효하지 않은 토큰입니다.2");
+            return new ResponseVO(ResultCode.REFRESH_EXPIRE_ERROR, "만료된 토큰입니다.");
         }
 
         String token = tokenSecurity.createToken(user_id, (1000 * 60 * 10));
@@ -123,12 +96,7 @@ public class MemberServiceImpl implements MemberService {
         tokenRepository.save(tokenEntity);
 
         //Cookie
-        Cookie token_cookie = new Cookie("token", token);
-        token_cookie.setMaxAge(1000 * 60 * 10);
-        token_cookie.setPath("/");
-        token_cookie.setHttpOnly(true);
-        response.addCookie(token_cookie);
-
+        ResponseUtils.tokenCookie(token, response);
         return new TokenVO(token);
     }
 

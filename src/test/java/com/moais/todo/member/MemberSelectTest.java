@@ -35,14 +35,14 @@ public class MemberSelectTest {
 
     @Test
     public void selectTest() {
-        Member member = memberRepository.findByUserId("test01");
-        Assertions.assertThat(member.getUserId().equals("test01"));
+        Member member = memberRepository.findByUserId("ccc");
+        Assertions.assertThat(member.getUserId().equals("ccc"));
     }
 
     @Test
     public void loginTest() {
         MemberLoginRequestVO vo = new MemberLoginRequestVO();
-        vo.setUser_id("test01");
+        vo.setUser_id("ccc");
         vo.setUser_pw("123456");
         HttpServletResponse httpServletResponse = new MockHttpServletResponse();
         ResponseVO response = memberService.memberLogin(vo, httpServletResponse);
