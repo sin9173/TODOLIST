@@ -48,9 +48,10 @@ public class SwaggerConfiguration extends WebMvcConfigurationSupport {
     @Override
     protected void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("*", "http://localhost:3000", "https://todo.nyangko.com", "https://localhost:8431")
-                .allowedMethods("POST", "GET", "OPTIONS", "PUT")
-                .allowedHeaders("Content-Type", "Access-Control-Allow-Origin", "Access-Control-Allow-Headers", "Access-Control-Allow-Credentials", "token", "refresh_token", "Accept")
+                .allowedOrigins("http://localhost:3000", "https://todo.nyangko.com", "https://localhost:8431")
+                .allowedMethods("POST", "GET", "OPTIONS", "PUT", "DELETE")
+                .allowedHeaders("Content-Type", "Access-Control-Allow-Origin", "Access-Control-Allow-Headers", "Access-Control-Allow-Credentials", "token", "refresh_token", "Accept", "userId")
+                .allowCredentials(true)
                 .maxAge(3600);
     }
 

@@ -3,6 +3,7 @@ package com.moais.todo.util;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -35,6 +36,7 @@ public class RequestUtil {
     //Args 로부터 파라미터를 추출
     public static String getRequestArgs(Object[] args) {
         List<String> collect = Arrays.stream(args)
+                .filter(o -> o!=null)
                 .map(o -> o.toString())
                 .collect(Collectors.toList());
         return collect.size()==0?"":collect.get(0);
@@ -63,6 +65,28 @@ public class RequestUtil {
             e.printStackTrace();
         }
         return stringBuilder.toString();
+    }
+
+    //Cookie 에서 값 가져오기
+    public static String getCookieParam(String s) {
+        HttpServletRequest request = getRequest();
+        Cookie[] cookies = request.getCookies();
+
+        String result = null;
+        String key;
+        String value;
+
+        if(cookies==null) return null;
+        for(Cookie c : cookies) {
+            key = c.getName();
+            value = c.getValue();
+            if(key.equals(s)) {
+                result = value;
+                break;
+            }
+        }
+
+        return result;
     }
 
 

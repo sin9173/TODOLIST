@@ -32,9 +32,13 @@ public class AuthAspect {
 
         //토큰체크
         String token = request.getHeader("token");
+        if(token == null || token.equals("")) token = RequestUtil.getCookieParam("token");
         if(token == null || token.equals("")) return new ResponseVO(ResultCode.LOGIN_ERROR, "로그인 해주세요.");
+
+        String user_id = request.getHeader("userId");
         String tokenCheck = tokenSecurity.getSubject(token);
         if(tokenCheck.equals("")) return new ResponseVO(ResultCode.LOGIN_ERROR, "유효하지 않은 토큰입니다.");
+        if(!tokenCheck.equals(user_id)) return new ResponseVO(ResultCode.LOGIN_ERROR, "올바르지 않은 아이디입니다.");
 
         //회원체크
         try {

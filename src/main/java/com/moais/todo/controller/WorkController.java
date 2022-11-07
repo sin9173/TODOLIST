@@ -21,23 +21,23 @@ public class WorkController {
 
     @TokenCheck
     @ApiOperation(value = "할일 등록", notes = "할일을 등록합니다.", response = ResponseVO.class)
-    @PostMapping("/work/register")
-    public ResponseVO workRegister(@RequestBody WorkRegisterRequestVO data, @RequestHeader("token") String token) {
-        return workService.workRegister(data, token);
+    @PostMapping("/work")
+    public ResponseVO workRegister(@RequestBody WorkRegisterRequestVO data, @RequestHeader("userId") String user_id) {
+        return workService.workRegister(data, user_id);
     }
 
     @TokenCheck
     @ApiOperation(value = "할일 수정", notes = "할일을 수정합니다.", response = ResponseVO.class)
-    @PostMapping("/work/modify/info")
-    public ResponseVO workModifyInfo(@RequestBody WorkModifyRequestVO data) {
-        return workService.workModify(data);
+    @PutMapping("/work/{id}")
+    public ResponseVO workModifyInfo(@RequestBody WorkModifyRequestVO data, @PathVariable Long id, @RequestHeader("userId") String user_id) {
+        return workService.workModify(data, id, user_id);
     }
 
     @TokenCheck
     @ApiOperation(value = "할일 상태 수정", notes = "할일의 상태를 수정합니다.", response = ResponseVO.class)
-    @PostMapping("/work/modify/state")
-    public ResponseVO workModifyState(@RequestBody WorkModifyStateRequestVO data) {
-        return workService.workModifyState(data);
+    @PutMapping("/work/state/{id}")
+    public ResponseVO workModifyState(@RequestBody WorkModifyStateRequestVO data, @PathVariable Long id, @RequestHeader("userId") String user_id) {
+        return workService.workModifyState(data, id, user_id);
     }
 
 
@@ -45,22 +45,22 @@ public class WorkController {
     @TokenCheck
     @ApiOperation(value = "TODO 리스트 조회", notes = "TODO 리스트를 조회합니다.", response = WorkListVO.class)
     @GetMapping("/work/list")
-    public ResponseVO workList(@ModelAttribute WorkListRequestVO data, @RequestHeader("token") String token) {
-        return workService.workList(data, token);
+    public ResponseVO workList(@ModelAttribute WorkListRequestVO data, @RequestHeader("userId") String user_id) {
+        return workService.workList(data, user_id);
     }
 
     @Nullable
     @TokenCheck
     @ApiOperation(value = "TODO 리스트 최근 데이터 조회", notes = "최근 할일을 조회합니다.", response = WorkRecentVO.class)
     @GetMapping("/work/recent")
-    public ResponseVO workRecent(@RequestHeader("token") String token) {
-        return workService.workRecent(token);
+    public ResponseVO workRecent(@RequestHeader("userId") String user_id) {
+        return workService.workRecent(user_id);
     }
 
     @TokenCheck
     @ApiOperation(value = "할일 삭제", notes = "할일을 삭제합니다.", response = ResponseVO.class)
-    @PostMapping("/work/delete")
-    public ResponseVO workDelete(@RequestBody WorkDeleteRequestVO data, @RequestHeader("token") String token) {
-        return workService.workDelete(data, token);
+    @DeleteMapping("/work/{id}")
+    public ResponseVO workDelete(@ModelAttribute WorkDeleteRequestVO data, @RequestHeader("userId") String user_id) {
+        return workService.workDelete(data, user_id);
     }
 }

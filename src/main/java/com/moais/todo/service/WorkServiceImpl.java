@@ -25,59 +25,64 @@ public class WorkServiceImpl implements WorkService {
 
     private final MemberRepository memberRepository;
 
-    private final TokenSecurity tokenSecurity;
-
     @Override
-    public ResponseVO workRegister(WorkRegisterRequestVO vo, String token) { //할일 등록
-        Member member = memberRepository.findByUserId(tokenSecurity.getSubject(token));
+    public ResponseVO workRegister(WorkRegisterRequestVO vo, String user_id) { //할일 등록
+        Member member = memberRepository.findByUserId(user_id);
         Work work = new Work(vo.getContent(), member);
         workRepository.save(work);
         return new ResponseVO();
     }
 
     @Override
-    public ResponseVO workList(WorkListRequestVO vo, String token) { //할일 리스트 조회
-        Member member = memberRepository.findByUserId(tokenSecurity.getSubject(token));
+    public ResponseVO workList(WorkListRequestVO vo, String user_id) { //할일 리스트 조회
+        Member member = memberRepository.findByUserId(user_id);
         Page<Work> data = workRepository.findByMemberOrderByIdDesc(member, PageRequest.of(vo.getPage()==0?(vo.getPage()):(vo.getPage()-1), 10));
         return new WorkListVO(data);
     }
 
     @Override
-    public ResponseVO workRecent(String token) { //할일 최근 데이터 조회
-        Member member = memberRepository.findByUserId(tokenSecurity.getSubject(token));
+    public ResponseVO workRecent(String user_id) { //할일 최근 데이터 조회
+        Member member = memberRepository.findByUserId(user_id);
         Work work = workRepository.findFirstByMemberOrderByRegDateDesc(member);
-        if(work==null) return new ResponseVO(ResultCode.NULL_ERROR, "데이터없음");
+        if(work==null) return new ResponseVO(ResultCode.NONE_ERROR, "데이터없음");
         return new WorkRecentVO(work);
     }
 
     @Override
-    public ResponseVO workModify(WorkModifyRequestVO vo) { //할일 수정
-        Optional<Work> workOptional = workRepository.findById(vo.getId());
-        if(workOptional==null) return new ResponseVO(ResultCode.NULL_ERROR, "존재하지 않는 할일입니다.");
-        Work work = workOptional.get();
+    public ResponseVO workModify(WorkModifyRequestVO vo, Long id, String user_id) { //할일 수정
+        Work work = getWork(id);
+        if(work==null) return new ResponseVO(ResultCode.NULL_ERROR, "존재하지 않는 할일입니다.");
+        if(!work.getMember().getUserId().equals(user_id))
+            return new ResponseVO(ResultCode.LOGIN_ERROR, "게시자의 아이디와 로그인한 계정이 다릅니다.");
         work.setContent(vo.getContent());
         workRepository.save(work);
         return new ResponseVO();
     }
 
     @Override
-    public ResponseVO workModifyState(WorkModifyStateRequestVO vo) { //할일 상태 수정
-        Optional<Work> workOptional = workRepository.findById(vo.getId());
-        if(workOptional==null) return new ResponseVO(ResultCode.NULL_ERROR, "존재하지 않는 할일입니다.");
-        Work work = workOptional.get();
+    public ResponseVO workModifyState(WorkModifyStateRequestVO vo, Long id, String user_id) { //할일 상태 수정
+        Work work = getWork(id);
+        if(work==null) return new ResponseVO(ResultCode.NULL_ERROR, "존재하지 않는 할일입니다.");
+        if(!work.getMember().getUserId().equals(user_id))
+            return new ResponseVO(ResultCode.LOGIN_ERROR, "게시자의 아이디와 로그인한 계정이 다릅니다.");
         work.setState(vo.getState());
         workRepository.save(work);
         return new ResponseVO();
     }
 
     @Override
-    public ResponseVO workDelete(WorkDeleteRequestVO vo, String token) {
-        Optional<Work> workOptional = workRepository.findById(vo.getId());
-        if(workOptional==null) return new ResponseVO(ResultCode.NULL_ERROR, "존재하지 않는 할일입니다.");
-        Work work = workOptional.get();
-        if(!work.getMember().getUserId().equals(tokenSecurity.getSubject(token)))
+    public ResponseVO workDelete(WorkDeleteRequestVO vo, String user_id) {
+        Work work = getWork(vo.getId());
+        if(work==null) return new ResponseVO(ResultCode.NULL_ERROR, "존재하지 않는 할일입니다.");
+        if(!work.getMember().getUserId().equals(user_id))
             return new ResponseVO(ResultCode.LOGIN_ERROR, "게시자의 아이디와 로그인한 계정이 다릅니다.");
         workRepository.delete(work);
         return new ResponseVO();
+    }
+
+    private Work getWork(Long id) {
+        Optional<Work> workOptional = workRepository.findById(id);
+        if(workOptional==null) return null;
+        return workOptional.get();
     }
 }

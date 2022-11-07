@@ -5,15 +5,15 @@ import com.moais.todo.vo.request.*;
 
 public interface WorkService {
 
-    public ResponseVO workRegister(WorkRegisterRequestVO vo, String token);
+    public ResponseVO workRegister(WorkRegisterRequestVO vo, String user_id);
 
-    public ResponseVO workList(WorkListRequestVO vo, String token);
+    public ResponseVO workList(WorkListRequestVO vo, String user_id);
 
-    public ResponseVO workRecent(String token);
+    public ResponseVO workRecent(String user_id);
 
-    public ResponseVO workModify(WorkModifyRequestVO vo);
+    public ResponseVO workModify(WorkModifyRequestVO vo, Long id, String user_id);
 
-    public ResponseVO workModifyState(WorkModifyStateRequestVO vo);
+    public ResponseVO workModifyState(WorkModifyStateRequestVO vo, Long id, String user_id);
 
-    public ResponseVO workDelete(WorkDeleteRequestVO vo, String token);
+    public ResponseVO workDelete(WorkDeleteRequestVO vo, String user_id);
 }

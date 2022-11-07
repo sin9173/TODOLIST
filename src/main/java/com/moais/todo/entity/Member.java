@@ -28,6 +28,9 @@ public class Member {
     @JoinColumn(name = "member_info_id")
     private MemberInfo memberInfo; //회원정보
 
+    @Column(name = "salt")
+    private String salt; //비밀번호 salt
+
     @Column(name = "reg_date")
     private LocalDateTime regDate = LocalDateTime.now(); //등록일시
 
@@ -38,10 +41,11 @@ public class Member {
 
     }
 
-    public Member(MemberRegisterRequestVO vo, MemberInfo memberInfo) {
+    public Member(MemberRegisterRequestVO vo, MemberInfo memberInfo, String salt) {
         this.userId = vo.getUser_id();
         this.userPw = vo.getUser_pw();
         this.memberInfo = memberInfo;
+        this.salt = salt;
     }
 
 }
