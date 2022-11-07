@@ -5,7 +5,7 @@ spring:
       jdbc-url: "jdbc:mysql://3.135.227.236:3306/?useSSL=false&allowPublicKeyRetrieval=true&serverTimzone=Asia/Seoul&allowMultiQueries=true&autoReconnection=true"
       username: sid
       password: dudwhg1!@
-      minimum-idle: 3
-      maximum-pool-size: 3
+      minimum-idle: 10
+      maximum-pool-size: 10
       validation-query: select 1
       idle-timeout: 60000
