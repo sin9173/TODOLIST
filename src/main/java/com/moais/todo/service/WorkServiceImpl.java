@@ -44,7 +44,7 @@ public class WorkServiceImpl implements WorkService {
     public ResponseVO workRecent(String user_id) { //할일 최근 데이터 조회
         Member member = memberRepository.findByUserId(user_id);
         Work work = workRepository.findFirstByMemberOrderByRegDateDesc(member);
-        if(work==null) return new ResponseVO(ResultCode.NULL_ERROR, "데이터없음");
+        if(work==null) return new ResponseVO(ResultCode.NONE_ERROR, "데이터없음");
         return new WorkRecentVO(work);
     }
 

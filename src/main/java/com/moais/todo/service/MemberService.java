@@ -13,7 +13,9 @@ public interface MemberService {
 
     public ResponseVO memberLogin(MemberLoginRequestVO vo, HttpServletResponse response); //회원 로그인
 
-    public ResponseVO tokenRefresh(String refresh_token, String access_token, String user_id);
+    public ResponseVO memberLogout(HttpServletResponse response);
+
+    public ResponseVO tokenRefresh(String refresh_token, String access_token, String user_id, HttpServletResponse response);
 
     public ResponseVO memberPasswordModify(MemberPasswordModifyRequestVO vo, String user_id); //회원 비밀번호 수정
 

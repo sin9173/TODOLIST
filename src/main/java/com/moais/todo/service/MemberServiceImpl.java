@@ -54,9 +54,9 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public ResponseVO memberLogin(MemberLoginRequestVO vo, HttpServletResponse response) { //회원 로그인
         Member member = memberRepository.findByUserId(vo.getUser_id());
-        if(member==null) return new ResponseVO(ResultCode.LOGIN_ERROR, "존재하지 않는 아이디입니다.");
+        if(member==null) return new ResponseVO(ResultCode.INFO_ERROR, "존재하지 않는 아이디입니다.");
         if(!(member.getUserPw()).equals(encryption.encrypt(vo.getUser_pw(), member.getSalt())))
-            return new ResponseVO(ResultCode.LOGIN_ERROR, "비밀번호가 일치하지 않습니다.");
+            return new ResponseVO(ResultCode.INFO_ERROR, "비밀번호가 일치하지 않습니다.");
 
         String token = tokenSecurity.createToken(member.getUserId(), (1000 * 60 * 10));
         String refresh_token = tokenSecurity.createToken("TODO", (1000 * 60 * 60 * 24));
@@ -82,17 +82,39 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public ResponseVO tokenRefresh(String refresh_token, String access_token, String user_id) {
+    public ResponseVO memberLogout(HttpServletResponse response) {
+        //Cookie
+        Cookie token_cookie = new Cookie("token", null);
+        token_cookie.setMaxAge(1000 * 60 * 10);
+        token_cookie.setPath("/");
+        token_cookie.setHttpOnly(true);
+
+        Cookie refresh_token_cookie = new Cookie("refresh_token", null);
+        refresh_token_cookie.setMaxAge(1000 * 60 * 60 * 24);
+        refresh_token_cookie.setPath("/");
+        refresh_token_cookie.setHttpOnly(true);
+
+        response.addCookie(token_cookie);
+        response.addCookie(refresh_token_cookie);
+
+        return new ResponseVO(ResultCode.SUCCESS_CODE, "로그아웃");
+    }
+
+    @Override
+    public ResponseVO tokenRefresh(String refresh_token, String access_token, String user_id, HttpServletResponse response) {
         if(refresh_token==null) refresh_token = RequestUtil.getCookieParam("refresh_token");
         if(access_token==null) access_token = RequestUtil.getCookieParam("token");
 
+        System.out.println("refresh : " + refresh_token);
+        System.out.println("access : " + access_token);
+
         Token tokenEntity = tokenRepository.findByRefreshTokenEqualsAndAccessTokenEquals(refresh_token, access_token);
 
-        if(tokenEntity==null) return new ResponseVO(ResultCode.LOGIN_ERROR, "유효하지 않은 토큰입니다.");
+        if(tokenEntity==null) return new ResponseVO(ResultCode.REFRESH_EXPIRE_ERROR, "유효하지 않은 토큰입니다.1");
         String tokenCheck = tokenSecurity.getSubject(refresh_token);
         if(tokenCheck.equals("")) {
             tokenRepository.delete(tokenEntity);
-            return new ResponseVO(ResultCode.LOGIN_ERROR, "유효하지 않은 토큰입니다.");
+            return new ResponseVO(ResultCode.REFRESH_EXPIRE_ERROR, "유효하지 않은 토큰입니다.2");
         }
 
         String token = tokenSecurity.createToken(user_id, (1000 * 60 * 10));
@@ -105,6 +127,7 @@ public class MemberServiceImpl implements MemberService {
         token_cookie.setMaxAge(1000 * 60 * 10);
         token_cookie.setPath("/");
         token_cookie.setHttpOnly(true);
+        response.addCookie(token_cookie);
 
         return new TokenVO(token);
     }
@@ -113,7 +136,7 @@ public class MemberServiceImpl implements MemberService {
     public ResponseVO memberPasswordModify(MemberPasswordModifyRequestVO vo, String user_id) { //비밀번호 변경
         if(vo.getUser_pw().equals("")) return new ResponseVO(ResultCode.NULL_ERROR, "비밀번호를 빈값으로 설정할 수 없습니다.");
         Member member = memberRepository.findByUserId(user_id);
-        if(!(member.getUserPw()).equals(encryption.encrypt(vo.getUser_pw(), member.getSalt()))) return new ResponseVO(ResultCode.LOGIN_ERROR, "비밀번호가 일치하지 않습니다.");
+        if(!(member.getUserPw()).equals(encryption.encrypt(vo.getUser_pw(), member.getSalt()))) return new ResponseVO(ResultCode.INFO_ERROR, "비밀번호가 일치하지 않습니다.");
         member.setSalt(encryption.getSalt());
         member.setUserPw(encryption.encrypt(vo.getNew_user_pw(), member.getSalt()));
         memberRepository.save(member);
@@ -131,7 +154,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public ResponseVO memberDelete(MemberDeleteRequestVO vo, String user_id) { //회원 탈퇴
         Member member = memberRepository.findByUserId(user_id);
-        if(!(member.getUserPw()).equals(encryption.encrypt(vo.getUser_pw(), member.getSalt()))) return new ResponseVO(ResultCode.LOGIN_ERROR, "비밀번호가 일치하지 않습니다.");
+        if(!(member.getUserPw()).equals(encryption.encrypt(vo.getUser_pw(), member.getSalt()))) return new ResponseVO(ResultCode.INFO_ERROR, "비밀번호가 일치하지 않습니다.");
         memberInfoRepository.delete(member.getMemberInfo());
         memberRepository.delete(member);
         return new ResponseVO();

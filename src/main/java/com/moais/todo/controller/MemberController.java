@@ -41,14 +41,22 @@ public class MemberController {
     }
 
     @Nullable
+    @ApiOperation(value = "로그아웃", notes = "로그아웃(쿠키사용시)", response = ResponseVO.class)
+    @GetMapping("/member/logout")
+    public ResponseVO memberLogout(HttpServletResponse response) {
+        return memberService.memberLogout(response);
+    }
+
+    @Nullable
     @ApiOperation(value = "토큰 갱신", notes = "Access 토큰을 갱신합니다.", response = TokenVO.class)
     @GetMapping("/token/refresh")
     public ResponseVO tokenRefresh(
             @RequestHeader(value = "refreshToken", required = false) String refresh_token,
             @RequestHeader(value = "accessToken", required = false) String access_token,
-            @RequestHeader(value = "userId") String user_id
+            @RequestHeader(value = "userId") String user_id,
+            HttpServletResponse response
             ) {
-        return memberService.tokenRefresh(refresh_token, access_token, user_id);
+        return memberService.tokenRefresh(refresh_token, access_token, user_id, response);
     }
 
     @TokenCheck
