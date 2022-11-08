@@ -19,18 +19,18 @@ public class ServletConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
+        //registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
         registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
         registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
 
-    @Override
-    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-        converters.add(new StringHttpMessageConverter(Charset.forName("UTF-8")));
-        converters.add(new MappingJackson2HttpMessageConverter());
-        converters.add(new ResourceHttpMessageConverter(true));
-        converters.add(new ByteArrayHttpMessageConverter());
-    }
+//    @Override
+//    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+//        converters.add(new StringHttpMessageConverter(Charset.forName("UTF-8")));
+//        converters.add(new MappingJackson2HttpMessageConverter());
+//        converters.add(new ResourceHttpMessageConverter(true));
+//        converters.add(new ByteArrayHttpMessageConverter());
+//    }
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {

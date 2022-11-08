@@ -7,5 +7,6 @@ spring:
       password: dudwhg1!@
       minimum-idle: 10
       maximum-pool-size: 10
+      test-while-idle: true
       validation-query: select 1
       idle-timeout: 60000

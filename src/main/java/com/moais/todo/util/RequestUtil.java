@@ -35,11 +35,9 @@ public class RequestUtil {
 
     //Args 로부터 파라미터를 추출
     public static String getRequestArgs(Object[] args) {
-        List<String> collect = Arrays.stream(args)
-                .filter(o -> o!=null)
-                .map(o -> o.toString())
-                .collect(Collectors.toList());
-        return collect.size()==0?"":collect.get(0);
+        String result = "";
+        if(args[0]!=null)  result = args[0].toString();
+        return result;
     }
 
 
